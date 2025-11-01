@@ -1,15 +1,15 @@
 const team = [
-  {name:"Alisson", position:"GK"},
-  {name:"Robertson", position:"LB"},
-  {name:"Varane", position:"CB"},
-  {name:"Alaba", position:"CB"},
-  {name:"De Bruyne", position:"CM"},
-  {name:"Verratti", position:"CM"},
-  {name:"Modric", position:"CM"},
-  {name:"Messi", position:"RW"},
-  {name:"Neymar", position:"LW"},
-  {name:"Haaland", position:"ST"},
-  {name:"Ronaldo", position:"ST"}
+  {name:"Alisson", position:"GK", nation:"BRA", club:"Liverpool"},
+  {name:"Robertson", position:"LB", nation:"SCO", club:"Liverpool"},
+  {name:"Varane", position:"CB", nation:"FRA", club:"Manchester United"},
+  {name:"Alaba", position:"CB", nation:"AUT", club:"Real Madrid"},
+  {name:"De Bruyne", position:"CM", nation:"BEL", club:"Manchester City"},
+  {name:"Verratti", position:"CM", nation:"ITA", club:"PSG"},
+  {name:"Modric", position:"CM", nation:"CRO", club:"Real Madrid"},
+  {name:"Messi", position:"RW", nation:"ARG", club:"Inter Miami"},
+  {name:"Neymar", position:"LW", nation:"BRA", club:"Al-Hilal"},
+  {name:"Haaland", position:"ST", nation:"NOR", club:"Manchester City"},
+  {name:"Ronaldo", position:"ST", nation:"POR", club:"Al-Nassr"}
 ];
 
 let dragged = null;
@@ -103,7 +103,50 @@ function resetFormation(){
   drawFormation();
 }
 
+function solveSBC() {
+  const nationReq = document.getElementById("reqNation").value.toUpperCase();
+  const clubReq = document.getElementById("reqClub").value.toLowerCase();
+  const posReq = document.getElementById("reqPosition").value;
+
+  const formation = document.getElementById("formation").value;
+  const layout = getFormationLayout(formation);
+  const field = document.getElementById("formationField");
+  field.innerHTML = "";
+
+  let filteredPlayers = team.filter(p=>{
+    let valid = true;
+    if(nationReq && p.nation.toUpperCase() !== nationReq) valid = false;
+    if(clubReq && p.club.toLowerCase() !== clubReq) valid = false;
+    if(posReq !== "all" && p.position !== posReq) valid = false;
+    return valid;
+  });
+
+  layout.forEach((pos,i)=>{
+    const player = filteredPlayers[i] || {name:"-", position:""};
+    const div = document.createElement("div");
+    div.classList.add("player-dot");
+    div.draggable = true;
+    div.dataset.index = i;
+    div.style.left = pos.x + "%";
+    div.style.top = pos.y + "%";
+    div.innerHTML = `${player.name}<br>${player.position}`;
+
+    div.addEventListener("dragstart", dragStart);
+    div.addEventListener("dragend", dragEnd);
+
+    field.appendChild(div);
+  });
+
+  const resultDiv = document.getElementById("sbcResult");
+  if(filteredPlayers.length >= layout.length){
+    resultDiv.innerHTML = "✅ SBC risolta automaticamente!";
+  } else {
+    resultDiv.innerHTML = `⚠️ Solo ${filteredPlayers.length} giocatori disponibili per ${layout.length} posizioni.`;
+  }
+}
+
 document.getElementById("formation").addEventListener("change", drawFormation);
 document.getElementById("resetBtn").addEventListener("click", resetFormation);
+document.getElementById("checkSBC").addEventListener("click", solveSBC);
 
 window.onload = drawFormation;
