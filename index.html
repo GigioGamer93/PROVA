@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Squad Builder</title>
+  <title>Squad Builder SBC</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Squad Builder</h1>
+  <h1>Squad Builder SBC</h1>
 
   <label for="formation">Seleziona modulo:</label>
   <select id="formation">
@@ -17,6 +17,32 @@
   </select>
 
   <button id="resetBtn">Reset campo</button>
+
+  <h2>Requisiti SBC</h2>
+  <div id="sbcRequirements">
+    <label for="reqNation">Nazionalità:</label>
+    <input type="text" id="reqNation" placeholder="Es. BRA, ITA...">
+
+    <label for="reqClub">Club:</label>
+    <input type="text" id="reqClub" placeholder="Es. Liverpool, PSG...">
+
+    <label for="reqPosition">Ruolo:</label>
+    <select id="reqPosition">
+      <option value="all">Tutti</option>
+      <option value="GK">GK</option>
+      <option value="CB">CB</option>
+      <option value="LB">LB</option>
+      <option value="RB">RB</option>
+      <option value="CM">CM</option>
+      <option value="LW">LW</option>
+      <option value="RW">RW</option>
+      <option value="ST">ST</option>
+    </select>
+
+    <button id="checkSBC">Risolvi SBC</button>
+  </div>
+
+  <div id="sbcResult"></div>
 
   <div id="formationField"></div>
 
